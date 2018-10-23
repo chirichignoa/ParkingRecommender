@@ -112,9 +112,3 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-RecommenderService/data/
-RecommenderService/models/
-RecommenderService/recommender/__init__.py
-RecommenderService/recommender/server.py
-RecommenderService/util/__init__.py
-RecommenderService/util/predictor.py
