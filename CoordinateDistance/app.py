@@ -3,12 +3,13 @@ from pathlib import Path
 import numpy as np
 from math import *
 import requests
+from flask_cors import CORS
 
 RADIUS = 200
 
 parking_meters = None
 app = Flask(__name__)
-
+CORS(app)
 
 @app.before_first_request
 def startup():
@@ -36,10 +37,8 @@ def calculate_distance(lat, lon):
     for parkingmeter in parking_meters:
         distance = float(get_haversine(lat, lon, parkingmeter['lat'], parkingmeter['lon']))
         if distance <= RADIUS:
-            print(str(distance) + " - " + parkingmeter['direccion'])
             parkingmeter['distance'] = distance
             ret.append(parkingmeter)
-    print(len(ret))
     return ret
 
 
