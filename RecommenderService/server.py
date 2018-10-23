@@ -1,13 +1,16 @@
+import json
 import pickle
 
 from flask import Flask, jsonify, request, make_response
 from pathlib import Path
 from util.predictor import dump_model, get_index
 import requests
+from flask_cors import CORS
 
 RADIUS = 200
 
 app = Flask(__name__)
+CORS(app)
 
 model = None
 parking_meters = None
@@ -38,28 +41,28 @@ def first_page():
 
 @app.route('/predict', methods=['POST'])
 def predict():
+    print(request.get_json())
     if (request.get_json() is None) or (request.get_json() == ""):
-        resp = make_response("The request does not have the necessary parameters", 200)
-        return resp
+        return make_response("The request does not have the necessary parameters", 200)
     try:
         # feature_array = request.get_json()['feature_array']
         lat = request.get_json()['lat']
         lon = request.get_json()['lon']
-        print("Predictor: Getting for " + str(lat) + " " + str(lon))
         time = get_index(request.get_json()['time'])
         dow = request.get_json()['dow']
-        r = requests.post("http://127.0.0.1:2525/nearest_parking", {'lat': lat, 'lon': lon})
-        # nearest_parkingmeters = r.json()
-        print(r)
-        prediction = "asd"
-        # calcular predicciones
-        # generar json con id_cuadra, lat, lon, prediccion
-
-        # prediction = model.predict([lat, lon, time, dow]).tolist()
-        return make_response(jsonify({'prediction': prediction}), 200)
+        r = requests.post("http://127.0.0.1:2525/nearest_parking", json={"lat": lat, "lon": lon})
+        nearest_parkingmeters = r.json()
+        ret = []
+        for parkingmeter in nearest_parkingmeters['nearest_parking']:
+            prediction = model.predict([[parkingmeter['id'], time, dow]])
+            json_object = {'id': parkingmeter['id'], 'lat': parkingmeter['lat'], 'lon': parkingmeter['lon'],
+                           'prediction': prediction[0]}
+            ret.append(json_object)
+        print("Request completed!")
+        print(ret)
+        return make_response(jsonify(ret), 200)
     except requests.RequestException:
-        resp = make_response("Error at connection", 200)
-        return resp
+        return make_response("Error at connection", 200)
 
 
 @app.errorhandler(400)
