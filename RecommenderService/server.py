@@ -56,7 +56,7 @@ def predict():
         for parkingmeter in nearest_parkingmeters['nearest_parking']:
             prediction = model.predict([[parkingmeter['id'], time, dow]])
             json_object = {'id': parkingmeter['id'], 'lat': parkingmeter['lat'], 'lon': parkingmeter['lon'],
-                           'prediction': prediction[0]}
+                           'prediction': prediction[0], 'dir': parkingmeter['direccion']}
             ret.append(json_object)
         print("Request completed!")
         print(ret)
