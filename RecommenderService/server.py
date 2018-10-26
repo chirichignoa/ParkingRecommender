@@ -8,12 +8,19 @@ import requests
 from flask_cors import CORS
 
 RADIUS = 200
+config = {
+    'host': "coordinate-distance-service",
+    'port': '2525',
+    'path': "nearest_parking"
+}
 
 app = Flask(__name__)
 CORS(app)
 
 model = None
 parking_meters = None
+
+
 
 
 @app.before_first_request
@@ -50,7 +57,10 @@ def predict():
         lon = request.get_json()['lon']
         time = get_index(request.get_json()['time'])
         dow = request.get_json()['dow']
-        r = requests.post("http://127.0.0.1:2525/nearest_parking", json={"lat": lat, "lon": lon})
+        # "http://127.0.0.1:2525/nearest_parking"
+        url = "http://" + config['host'] + ":" + config['port'] + "/" + config['path']
+        print(url)
+        r = requests.post(url, json={"lat": lat, "lon": lon})
         nearest_parkingmeters = r.json()
         ret = []
         for parkingmeter in nearest_parkingmeters['nearest_parking']:
