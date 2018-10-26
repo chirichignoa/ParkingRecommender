@@ -5,15 +5,35 @@ import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
+import java.util.Properties;
 
 public class ParkingMetersDAO {
 
     private static ParkingMetersDAO instance;
     private static Connection connection;
     private static Logger log = LogManager.getLogger(ParkingMetersDAO.class);
+    private static Properties prop;
+    private String URL = new String();
 
     public ParkingMetersDAO() {
+        prop = new Properties();
+        InputStream is = null;
+        try {
+            is =this.getClass().getClassLoader().getResourceAsStream("properties.properties");
+            prop.load(is);
+            this.URL = new StringBuffer().append("jdbc:mysql://")
+                    .append(prop.getProperty("db.host"))
+                    .append(":")
+                    .append(prop.getProperty("db.port"))
+                    .append("/")
+                    .append(prop.getProperty("db.name")).toString();
+        } catch(IOException e) {
+            System.out.println(e.toString());
+        }
         try {
             Class.forName("com.mysql.jdbc.Driver");
             log.debug("Successfully registered");
@@ -22,7 +42,7 @@ public class ParkingMetersDAO {
         }
         try {
             // DriverManager: The basic service for managing a set of JDBC drivers.
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/parking", "parkinguser", "parkinguser");
+            connection = DriverManager.getConnection(this.URL, prop.getProperty("db.user"), prop.getProperty("db.pass"));
             if (connection != null) {
                 log.debug("Connection Successful!");
             } else {
@@ -30,6 +50,9 @@ public class ParkingMetersDAO {
             }
         } catch (SQLException e) {
             log.debug("MySQL Connection Failed!");
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            log.debug("Dont found properties for connection to DB");
             e.printStackTrace();
         }
     }
@@ -45,7 +68,7 @@ public class ParkingMetersDAO {
         Statement stmt;
         try {
             stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("select * from coordinates_parking");
+            ResultSet rs = stmt.executeQuery("select * from " + prop.getProperty("db.table"));
             return convertToJSON(rs);
         } catch (Exception e) {
             e.printStackTrace();

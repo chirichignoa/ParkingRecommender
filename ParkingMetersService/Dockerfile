@@ -1,4 +1,7 @@
 FROM java:8
-EXPOSE 4567
-ADD /target/ParkingMetersService.jar ParkingMetersService.jar
+
+WORKDIR /app
+ADD /target/ParkingMetersService.jar /app/ParkingMetersService.jar
 ENTRYPOINT ["java", "-jar", "ParkingMetersService.jar"]
+
+EXPOSE 4567
