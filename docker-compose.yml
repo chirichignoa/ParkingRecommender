@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+  database:
+    image: mysql:8.0.13
+    ports:
+      - "3306:3306"
+    environment: 
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: parking
+      MYSQL_USER: parkinguser
+      MYSQL_PASSWORD: parkinguser
+      MYSQL_DATA_DIR: /var/lib/mysql
+      MYSQL_RUN_DIR: /run/mysqld
+      MYSQL_LOG_DIR: /var/log/mysql
+    volumes:
+      - ./scripts:/docker-entrypoint-initdb.d/:ro
+
+  parkingmeters-service:
+    build:
+      context: ./ParkingMetersService
+      dockerfile: Dockerfile
+    working_dir: /app
+    ports:
+      - "4567:4567"
+    links: 
+      - database
+
+  coordinate-distance-service:
+    build:
+      context: ./CoordinateDistance
+      dockerfile: Dockerfile
+    working_dir: /app
+    ports:
+      - "2525:2525"
+    links:
+      - parkingmeters-service
+
+  recommender-service:
+    build:
+      context: ./RecommenderService
+      dockerfile: Dockerfile
+    working_dir: /app
+    ports:
+      - "5000:5000"
+    links:
+      -  coordinate-distance-service
