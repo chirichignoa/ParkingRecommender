@@ -1,0 +1,51 @@
+-- MySQL dump 10.13  Distrib 8.0.13, for Linux (x86_64)
+--
+-- Host: localhost    Database: parking
+-- ------------------------------------------------------
+-- Server version	8.0.13
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+ SET NAMES utf8 ;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `coordinates_parking`
+--
+
+DROP TABLE IF EXISTS `coordinates_parking`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `coordinates_parking` (
+  `id` int(11) NOT NULL,
+  `direccion` varchar(255) NOT NULL,
+  `lat` decimal(10,6) DEFAULT NULL,
+  `lon` decimal(10,6) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `coordinates_parking`
+--
+
+LOCK TABLES `coordinates_parking` WRITE;
+/*!40000 ALTER TABLE `coordinates_parking` DISABLE KEYS */;
+INSERT INTO `coordinates_parking` VALUES (2,'General Pinto 545',-37.326989,-59.134525),(3,'San Martin 452',-37.327046,-59.138908),(4,'Rodriguez 552',-37.326980,-59.136488),(5,'9 de Julio 441',-37.327755,-59.133979),(6,'General Pinto 759',-37.326733,-59.133655),(7,'San Martin 758',-37.325414,-59.134400),(8,'Sarmiento 641',-37.324988,-59.136680),(9,'San Martin 560',-37.326493,-59.137244),(10,'Rodriguez 654',-37.325736,-59.137201),(11,'San Martin 658',-37.325984,-59.135876),(12,'Belgrano 480',-37.331514,-59.142079),(13,'General Pinto 343',-37.328883,-59.139286),(14,'Rodriguez 464',-37.401344,-59.503029),(15,'General Pinto 631',-37.327398,-59.135447),(16,'San Martin 852',-37.324913,-59.133075),(17,'Belgrano 660',-37.328530,-59.134375),(19,'Sarmiento 543',-37.325554,-59.138081),(20,'General Pinto 490',-37.328059,-59.137516),(21,'Belgrano 540',-37.331514,-59.142079),(22,'Belgrano 768',-37.327956,-59.132831),(23,'Belgrano 364',-37.330008,-59.138297),(24,'Belgrano 868',-37.327408,-59.131378),(25,'Belgrano 958',-37.326852,-59.129888),(26,'9 de Julio 345',-37.328992,-59.133249),(27,'General Pinto 843',-37.326222,-59.132390),(28,'General Pinto 945',-37.325658,-59.130899),(29,'San Martin 364',-37.327488,-59.139840),(30,'San Martin 944',-37.324379,-59.131650),(31,'Sarmiento 351',-37.326505,-59.140591),(32,'Sarmiento 453',-37.325966,-59.139240),(33,'Sarmiento 755',-37.324389,-59.135116),(34,'Sarmiento 849',-37.323875,-59.133738),(35,'Sarmiento 945',-37.323310,-59.132245),(36,'Mitre 758',-37.323060,-59.135846),(37,'Mitre 846',-37.322557,-59.134554),(38,'Mitre 948',-37.321993,-59.132992),(39,'Chacabuco 442',-37.329276,-59.138120),(40,'Mitre 348',-37.325181,-59.141392),(41,'Mitre 446',-37.324677,-59.140055),(42,'Mitre 552',-37.324179,-59.138750),(43,'Mitre 648',-37.323661,-59.137384),(44,'Alem 362',-37.328328,-59.132060),(45,'Alem 480',-37.326829,-59.132984),(46,'Alem 556',-37.325800,-59.133573),(47,'Alem 658',-37.324625,-59.134287),(48,'Alem 770',-37.323367,-59.135025),(49,'Alem 852',-37.322284,-59.135665),(50,'9 de Julio 549',-37.326359,-59.134801),(51,'Chacabuco 562',-37.327858,-59.138987),(52,'Chacabuco 646',-37.326823,-59.139637),(53,'Chacabuco 752',-37.325569,-59.140365),(54,'Chacabuco 852',-37.324351,-59.141119),(55,'14 de Julio 467',-37.329535,-59.139558),(56,'Yrigoyen 557',-37.327355,-59.137599),(57,'Yrigoyen 753',-37.325041,-59.138983),(58,'Yrigoyen 847',-37.323879,-59.139661),(59,'Yrigoyen 655',-37.326194,-59.138293),(60,'Fuerte Independencia 349',-37.329984,-59.136054),(61,'Chacabuco 357',-37.330378,-59.137267),(62,'9 de Julio 753',-37.323993,-59.136190),(63,'9 de Julio 843',-37.322879,-59.136844),(64,'Rodriguez 348',-37.329563,-59.134878),(65,'Rodriguez 746',-37.324632,-59.137788),(66,'Rodriguez 846',-37.323452,-59.138491),(67,'14 de Julio 347',-37.330982,-59.138664),(68,'14 de Julio 557',-37.328347,-59.140264),(69,'14 de Julio 657',-37.327215,-59.140953),(70,'14 de Julio 767',-37.325938,-59.141712),(71,'14 de Julio 847',-37.324895,-59.142335),(72,'Maipu 453',-37.330893,-59.136279),(73,'Maipu 547',-37.330454,-59.135116),(74,'Maipu 653',-37.329891,-59.133641),(75,'Maipu 333',-37.331478,-59.137872),(76,'Maipu 741',-37.329399,-59.132342),(77,'Maipu 857',-37.328773,-59.130699),(78,'Maipu 953',-37.328217,-59.129253),(79,'General Paz 347',-37.327859,-59.130346),(80,'General Paz 447',-37.326585,-59.131110),(81,'General Paz 547',-37.325303,-59.131883),(82,'General Paz 647',-37.324123,-59.132594),(83,'General Paz 739',-37.323006,-59.133252),(84,'General Paz 845',-37.321794,-59.133957),(85,'Av. Espana 359',-37.324035,-59.141952),(86,'Av. Espana 481',-37.323434,-59.140434),(87,'Av. Espana 545',-37.323065,-59.139446),(88,'Av. Espana 647',-37.322567,-59.138066),(89,'Av. Espana 737',-37.322079,-59.136759),(90,'Av. Espana 843',-37.321505,-59.135254),(91,'Av. Espana 957',-37.320825,-59.133489);
+/*!40000 ALTER TABLE `coordinates_parking` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2018-10-23 12:40:43

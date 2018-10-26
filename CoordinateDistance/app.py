@@ -15,7 +15,13 @@ CORS(app)
 def startup():
     global parking_meters
     try:
-        r = requests.get("http://localhost:4567/parking_meters/all")
+        config = {
+            'host': "http://parkingmeters-service",
+            'port': '4567',
+            'path': "parking_meters/all"
+        }
+        # "http://localhost:4567/parking_meters/all"
+        r = requests.get(config['host'] + ":" + config['port'] + "/" + config['path'])
         parking_meters = r.json()
     except requests.RequestException:
         print("Error at connection")
