@@ -1,0 +1,17 @@
+# Ejecuto la imagen de MYSQL 
+docker run --name=mysql-coordinate-parkingmeters -d mysql-coordinate-parkingmeters
+
+# Ejecuto el microservicio de ParkingMeters
+docker run --name=parkingmeters-service --link=mysql-coordinate-parkingmeters:database -d -p 4567:4567 parkingmeters-service
+
+# Ejecuto el microservicio de CoordinateDistance
+docker run --name=coordinate-distance-service --link=parkingmeters-service:parkingmeters-service -d -p 2525:2525 coordinate-distance-service
+
+# Ejecuto el microservicio de Recommender
+docker run --name=recommender-service --link=coordinate-distance-service:coordinate-distance-service -d -p 4567:4567 recommender-service
+
+# Borrar todos los containers parados
+docker rm $(docker ps -aq)
+
+# Borrar todas las imagenes
+docker rmi $(docker images -q)
