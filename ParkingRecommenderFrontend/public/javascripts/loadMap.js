@@ -1,7 +1,7 @@
 // const rp = require('request-promise');
 let startPos;
 let lat, lon;
-const url = "http://recommender-service:5000/predict";
+const url = "http://172.21.0.5:5000/predict";
 const LOW_AVAILABILITY = 0.33,
     MEDIUM_AVAILABILITY = 0.66,
     HIGH_AVAILABILITY = 1;
@@ -96,8 +96,7 @@ function readResponseAsJSON(response) {
 }
 
 function fetchPrediction(lat, lon, currentDate) {
-    let url = "http://0.0.0.0:5000/predict";
-    //let url = "http://recommender-service:5000/predict";
+    let url = "http://172.21.0.5:5000/predict";
     fetch(url, {
             method: 'POST',
             headers: {

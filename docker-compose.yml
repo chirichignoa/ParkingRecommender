@@ -15,6 +15,8 @@ services:
       MYSQL_LOG_DIR: /var/log/mysql
     volumes:
       - ./scripts:/docker-entrypoint-initdb.d/:ro
+    networks: 
+      - backend
 
   parkingmeters-service:
     build:
@@ -25,6 +27,8 @@ services:
       - "4567:4567"
     links: 
       - database
+    networks: 
+      - backend
 
   coordinate-distance-service:
     build:
@@ -35,6 +39,8 @@ services:
       - "2525:2525"
     links:
       - parkingmeters-service
+    networks: 
+      - backend
 
   recommender-service:
     build:
@@ -44,9 +50,11 @@ services:
     ports:
       - "5000:5000"
     links:
-      -  coordinate-distance-service
+      - coordinate-distance-service
+    networks: 
+      - backend
 
-  frontend:
+  frontend-module:
     build:
       context: ./ParkingRecommenderFrontend
       dockerfile: Dockerfile
@@ -55,3 +63,11 @@ services:
       - "3000:80"
     links:
       - recommender-service
+    networks: 
+      - frontend
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
