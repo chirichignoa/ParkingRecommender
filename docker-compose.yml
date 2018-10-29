@@ -45,3 +45,13 @@ services:
       - "5000:5000"
     links:
       -  coordinate-distance-service
+
+  frontend:
+    build:
+      context: ./ParkingRecommenderFrontend
+      dockerfile: Dockerfile
+    working_dir: /app
+    ports:
+      - "3000:80"
+    links:
+      - recommender-service
