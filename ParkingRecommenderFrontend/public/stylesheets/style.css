@@ -1,0 +1,14 @@
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+/*#mapid { height: 180px; }*/
+
+#mapid {
+  height: 100%;
+  width:100%;
+}
