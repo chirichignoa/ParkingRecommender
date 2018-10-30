@@ -23,9 +23,10 @@ services:
       context: ./ParkingMetersService
       dockerfile: Dockerfile
     working_dir: /app
+    # image: chirichignoa/parkingrecommender_parkingmeters-service:latest
     ports:
       - "4567:4567"
-    links: 
+    depends_on: 
       - database
     networks: 
       - backend
@@ -35,9 +36,10 @@ services:
       context: ./CoordinateDistance
       dockerfile: Dockerfile
     working_dir: /app
+    # image: chirichignoa/parkingrecommender_coordinate-distance-service:latest
     ports:
       - "2525:2525"
-    links:
+    depends_on:
       - parkingmeters-service
     networks: 
       - backend
@@ -47,9 +49,10 @@ services:
       context: ./RecommenderService
       dockerfile: Dockerfile
     working_dir: /app
+    # image: chirichignoa/parkingrecommender_recommender-service:latest
     ports:
       - "5000:5000"
-    links:
+    depends_on:
       - coordinate-distance-service
     networks: 
       - backend
@@ -59,15 +62,18 @@ services:
       context: ./ParkingRecommenderFrontend
       dockerfile: Dockerfile
     working_dir: /app
+    # image: chirichignoa/parkingrecommender_frontend-module:latest
     ports:
       - "3000:80"
-    links:
+    depends_on:
+      - recommender-service
+    links: 
       - recommender-service
     networks: 
       - frontend
 
 networks:
   frontend:
-    driver: bridge
+  #  driver: bridge
   backend:
-    driver: bridge
+  #  driver: bridge
