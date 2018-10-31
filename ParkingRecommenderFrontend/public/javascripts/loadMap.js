@@ -65,7 +65,7 @@ let roundTime = (time, minutesToRound) => {
     let rHr = '' + Math.floor(rounded / 60);
     let rMin = '' + rounded % 60;
 
-    return rHr.padStart(2, '0') + ':' + rMin.padStart(2, '0')
+    return rHr.padStart(2, '0') + ':' + rMin.padStart(2, '0');
 };
 
 
