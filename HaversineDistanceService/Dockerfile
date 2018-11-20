@@ -2,12 +2,15 @@ FROM python:3.6
 
 WORKDIR /app
 
-ENV FLASK_APP app.py
-ENV FLASK_ENV development
+RUN mkdir -p /app/server
+
+ENV FLASK_APP server/app.py
+ENV FLASK_ENV prod
 # ENV FLASK_DEBUG 0
 
 # COPY APP
-ADD ./app.py /app/
+ADD app/* /app/server
+ADD config.py /app
 # COPY DEPENDENCIES
 ADD ./requirements.txt /app/
 
