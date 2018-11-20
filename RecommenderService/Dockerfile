@@ -2,19 +2,20 @@ FROM python:3.6
 
 WORKDIR /app
 
-ENV FLASK_APP server.py
-ENV FLASK_ENV development
+ENV FLASK_APP server/server.py
+ENV FLASK_ENV prod
 # ENV FLASK_DEBUG 0
 
-RUN export FLASK_APP=server.py
-RUN export FLASK_ENV=development
+#RUN export FLASK_APP=server/server.py
+#RUN export FLASK_ENV=prod
 
 RUN mkdir -p /app/data/
 RUN mkdir -p /app/models/
 RUN mkdir -p /app/util/
+RUN mkdir -p /app/server/
 
 # COPY APP
-ADD ./server.py /app/
+ADD ./server/* /app/server/
 # COPY DEPENDENCIES
 ADD ./requirements.txt /app/
 # COPY BINS FOR MODEL
