@@ -51,6 +51,8 @@ def get_distance():
     lng_s = float(request.args.get('lng_s', None))
     lat_d = float(request.args.get('lat_d', None))
     lng_d = float(request.args.get('lng_d', None))
+    if (lat_s is None) or (lng_s is None) or (lat_d is None) or (lng_d is None):
+        return make_response(jsonify("The request does not have neccessary parameters"), 400)
     return make_response(jsonify({'distance': get_haversine(lat_s, lng_s, lat_d, lng_d)}), 200)
 
 
