@@ -1,10 +1,10 @@
 import pickle
-from flask import jsonify, request, make_response
+from flask import jsonify, request, make_response, Flask
 from pathlib import Path
 from util.predictor import dump_model
 from flask_cors import CORS
-from server import app
 
+app = Flask(__name__)
 CORS(app)
 
 model = None

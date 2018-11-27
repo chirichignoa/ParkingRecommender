@@ -1,11 +1,10 @@
-from flask import jsonify, request, make_response
+from flask import jsonify, request, make_response, Flask
 
 from math import *
 from flask_cors import CORS
-from app import app
 
 # RADIUS = 200
-
+app = Flask(__name__)
 # parking_meters = None
 CORS(app)
 
