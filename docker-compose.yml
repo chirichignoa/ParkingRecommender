@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  database:
+  database-parkingmeters:
     image: mysql:8.0.13
     ports:
       - "3306:3306"
@@ -14,61 +14,147 @@ services:
       MYSQL_RUN_DIR: /run/mysqld
       MYSQL_LOG_DIR: /var/log/mysql
     volumes:
-      - ./scripts:/docker-entrypoint-initdb.d/:ro
+      - ./scripts/parkingmeters:/docker-entrypoint-initdb.d/:ro
+    networks: 
+      - backend
+
+  database-movements:
+    image: mysql:8.0.13
+    ports:
+      - "3307:3306"
+    environment: 
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: parking
+      MYSQL_USER: parkinguser
+      MYSQL_PASSWORD: parkinguser
+      MYSQL_DATA_DIR: /var/lib/mysql
+      MYSQL_RUN_DIR: /run/mysqld
+      MYSQL_LOG_DIR: /var/log/mysql
+    volumes:
+      - ./scripts/movements:/docker-entrypoint-initdb.d/:ro
+    networks: 
+      - backend
+  
+  database-avr:
+    image: mysql:8.0.13
+    ports:
+      - "3308:3306"
+    environment: 
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: parking
+      MYSQL_USER: parkinguser
+      MYSQL_PASSWORD: parkinguser
+      MYSQL_DATA_DIR: /var/lib/mysql
+      MYSQL_RUN_DIR: /run/mysqld
+      MYSQL_LOG_DIR: /var/log/mysql
+    volumes:
+      - ./scripts/avr:/docker-entrypoint-initdb.d/:ro
     networks: 
       - backend
 
   parkingmeters-service:
-    # build:
-    #   context: ./ParkingMetersService
-    #   dockerfile: Dockerfile
-    # working_dir: /app
-    image: chirichignoa/parkingrecommender_parkingmeters-service:latest
+    build:
+      context: ./ParkingMetersService
+      dockerfile: Dockerfile
+    working_dir: /app
+    # image: chirichignoa/parkingrecommender_parkingmeters-service:latest
     ports:
       - "4567:4567"
     depends_on: 
-      - database
+      - database-parkingmeters
+    links: 
+      - database-parkingmeters
     networks: 
       - backend
 
-  coordinate-distance-service:
-    # build:
-    #   context: ./CoordinateDistance
-    #   dockerfile: Dockerfile
-    # working_dir: /app
-    image: chirichignoa/parkingrecommender_coordinate-distance-service:latest
+  movements-service:
+    build:
+      context: ./MovementsService
+      dockerfile: Dockerfile
+    working_dir: /app
+    # image: chirichignoa/parkingrecommender_movements-service:latest
+    ports:
+      - "4568:4568"
+    depends_on: 
+      - database-movements
+    links:
+      - database-movements
+    networks: 
+      - backend
+    
+  avr-service:
+    build:
+      context: ./AVRService
+      dockerfile: Dockerfile
+    working_dir: /app
+    # image: chirichignoa/parkingrecommender_avr-service:latest
+    ports:
+      - "4569:4569"
+    depends_on: 
+      - database-avr
+    links:
+      - database-avr
+    networks: 
+      - backend
+
+  haversine-distance-service:
+    build:
+      context: ./HaversineDistanceService
+      dockerfile: Dockerfile
+    working_dir: /app
+    # image: chirichignoa/parkingrecommender_haversine-distance-service:latest
     ports:
       - "2525:2525"
     depends_on:
+      - parkingmeters-service
+    links:
       - parkingmeters-service
     networks: 
       - backend
 
   recommender-service:
-    # build:
-    #   context: ./RecommenderService
-    #   dockerfile: Dockerfile
-    # working_dir: /app
-    image: chirichignoa/parkingrecommender_recommender-service:latest
+    build:
+      context: ./RecommenderService
+      dockerfile: Dockerfile
+    working_dir: /app
+    #image: chirichignoa/parkingrecommender_recommender-service:latest
     ports:
       - "5000:5000"
-    depends_on:
-      - coordinate-distance-service
     networks: 
       - backend
 
-  frontend-module:
-    # build:
-    #   context: ./ParkingRecommenderFrontend
-    #   dockerfile: Dockerfile
-    # working_dir: /app
-    image: chirichignoa/parkingrecommender_frontend-module:latest
+  parking-recommender-app:
+    build:
+      context: ./ParkingRecommender
+      dockerfile: Dockerfile
+    working_dir: /app
+    #image: chirichignoa/parkingrecommender_parking-recommender-app:latest
+    ports:
+      - "4000:4000"
+    depends_on:
+      - recommender-service
+      - parkingmeters-service
+      - haversine-distance-service
+    links: 
+      - recommender-service
+      - parkingmeters-service
+      - haversine-distance-service
+    networks: 
+      - backend
+      - frontend
+      
+  parking-recommender-frontend:
+    build:
+      context: ./ParkingRecommenderFrontend
+      dockerfile: Dockerfile
+    working_dir: /app
+    #image: chirichignoa/parkingrecommender_parking-recommender-frontend:latest
     ports:
       - "3000:80"
     depends_on:
-      - recommender-service
+      - parking-recommender-app
     links: 
-      - recommender-service
+      - parking-recommender-app
     networks: 
       - frontend
 
