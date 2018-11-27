@@ -9,17 +9,17 @@ from flask import Flask
 
 PARKING_METERS_SERVICE = {
     'HOST': "http://parkingmeters-service",
-    'PORT': '2500',
+    'PORT': '4567',
     'PATH': "parking_meters/all"
 }
 HAVERSINE_DISTANCE_SERVICE = {
-    'HOST': "http://coordinate-distance-service",
-    'PORT': '3500',
-    'PATH': "distance/get_distance"
+    'HOST': "http://haversine-distance-service",
+    'PORT': '2525',
+    'PATH': "calculate_distance"
 }
 PARKING_RECOMMENDER_SERVICE = {
-    'HOST': "http://parking-recommender-service",
-    'PORT': '4500',
+    'HOST': "http://recommender-service",
+    'PORT': '5000',
     'PATH': "predict"
 }
 
@@ -52,20 +52,27 @@ def get_parkingmeters():
                          PARKING_METERS_SERVICE['PORT'] + "/" +
                          PARKING_METERS_SERVICE['PATH'])
         parking_meters = r.json()
-        print(parking_meters)
     except requests.RequestException:
         print("Error at connection")
+
+
+@app.route('/nearest', methods=['GET'])
+def nearest_parkingmeters():
+    lat = request.args.get('lat', None)
+    lon = request.args.get('lon', None)
+    asd = get_nearest_parkingmeters(lat, lon)
+    return make_response(jsonify(asd), 200)
 
 
 def get_nearest_parkingmeters(lat, lon):
     ret = []
     for parkingmeter in parking_meters:
-        payload = {'lat_s': lat, 'lon_s': lon, 'lat_d': parkingmeter['lat'], 'lon_d': parkingmeter['lon']}
+        payload = {'lat_s': lat, 'lng_s': lon, 'lat_d': parkingmeter['lat'], 'lng_d': parkingmeter['lon']}
         r = requests.get(HAVERSINE_DISTANCE_SERVICE['HOST'] + ":" +
                          HAVERSINE_DISTANCE_SERVICE['PORT'] + "/" +
                          HAVERSINE_DISTANCE_SERVICE['PATH'],
                          params=payload)
-        distance = r.json()
+        distance = r.json()['distance']
         if distance <= RADIUS:
             parkingmeter['distance'] = distance
             ret.append(parkingmeter)
@@ -83,25 +90,27 @@ def startup():
 
 @app.route('/prediction', methods=['GET'])
 def get_prediction():
-    # if (request.get_json() is None) or (request.get_json() == ""):
-    #     return make_response("The request does not have the necessary parameters", 400)
     ret = []
-    lat = request.get_json()['lat']
-    lon = request.get_json()['lon']
-    time = get_index(request.get_json()['time'])
-    dow = request.get_json()['dow']
+    lat = request.args.get('lat', None)
+    lon = request.args.get('lon', None)
+    time = request.args.get('time', None)
+    dow = request.args.get('dow', None)
+    if (lat is None) or (lon is None) or (time is None) or (dow is None):
+        return make_response("The request does not have the necessary parameters", 400)
+    time = get_index(time)
     nearest_parkingmeters = get_nearest_parkingmeters(lat, lon)
-    for parkingmeter in nearest_parkingmeters['nearest_parking']:
+    for parkingmeter in nearest_parkingmeters:
         payload = {'id_cuadra': parkingmeter['id'], 'time': time, 'dow': dow}
         prediction = requests.get(PARKING_RECOMMENDER_SERVICE['HOST'] + ":" +
                                   PARKING_RECOMMENDER_SERVICE['PORT'] + "/" +
                                   PARKING_RECOMMENDER_SERVICE['PATH'],
                                   params=payload).json()
         json_object = {'id': parkingmeter['id'], 'lat': parkingmeter['lat'], 'lon': parkingmeter['lon'],
-                       'prediction': prediction[0], 'dir': parkingmeter['direccion']}
+                       'prediction': prediction['prediction'], 'dir': parkingmeter['direccion']}
         ret.append(json_object)
     return make_response(jsonify(ret), 200)
 
 
 if __name__ == '__main__':
+    # app.run(host='0.0.0.0', port=80)
     app.run()
