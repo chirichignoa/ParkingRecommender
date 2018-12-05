@@ -1,0 +1,16 @@
+/*#map {*/
+  /*height: 980px; }*/
+
+html, body {
+  height: 100%;
+}
+
+#map {
+  height: 100%;
+  width:100%;
+}
+
+.heatmap {
+  height: 100%;
+  width: 100%;
+}

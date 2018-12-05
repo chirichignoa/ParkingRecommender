@@ -15,3 +15,17 @@ docker rm $(docker ps -aq)
 
 # Borrar todas las imagenes
 docker rmi $(docker images -q)
+
+docker tag parkingrecommender_frontend-module chirichignoa/parkingrecommender_frontend-module:latest
+docker push chirichignoa/parkingrecommender_frontend-module:v1
+
+docker tag parkingrecommender_recommender-service chirichignoa/parkingrecommender_recommender-service:latest
+docker push chirichignoa/parkingrecommender_recommender-service:latest
+
+docker tag parkingrecommender_coordinate-distance-service chirichignoa/parkingrecommender_coordinate-distance-service:latest
+docker push chirichignoa/parkingrecommender_coordinate-distance-service:latest
+
+docker tag parkingrecommender_parkingmeters-service chirichignoa/parkingrecommender_parkingmeters-service:latest
+docker push chirichignoa/parkingrecommender_parkingmeters-service:latest
+
+

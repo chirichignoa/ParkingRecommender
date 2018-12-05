@@ -1,0 +1,52 @@
+//extends layout
+doctype html
+html
+    head
+        link(rel = 'stylesheet', href = '/stylesheets/style.css')
+        link(rel='stylesheet' href='https://unpkg.com/leaflet@1.3.1/dist/leaflet.css')
+        script(type='text/javascript', src='/javascripts/utils/leaflet.js')
+        script(type='text/javascript', src='/javascripts/utils/heatmap.js')
+        script(type='text/javascript', src='/javascripts/utils/leaflet-heatmap.js')
+    body
+        block content
+            #map
+            script.
+                window.onload = function () {
+                    var data = !{JSON.stringify(jsonData)};
+                    var cfg = {
+                        // radius should be small ONLY if scaleRadius is true (or small radius is intended)
+                        // if scaleRadius is false it will be the constant radius used in pixels
+                        "radius": 0.0005,
+                        "minOpacity": .3,
+                        "maxOpacity": .9,
+                        // scales the radius based on map zoom
+                        "scaleRadius": true,
+                        // if set to false the heatmap uses the global maximum for colorization
+                        // if activated: uses the data maximum within the current map boundaries
+                        //   (there will always be a red spot with useLocalExtremas true)
+                        "useLocalExtrema": true,
+                        // which field name in your data represents the latitude - default "lat"
+                        latField: 'lat',
+                        // which field name in your data represents the longitude - default "lng"
+                        lngField: 'lon',
+                        // which field name in your data represents the data value - default "value"
+                        valueField: 'count'
+                        //gradient: {0: '#fef0d9', 0.25: '#fdcc8a', 0.5: '#fc8d59', 0.75: '#e34a33', 1: '#b30000'}
+                    };
+                    var baseLayer = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+                        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                        maxZoom: 18,
+                        id: 'mapbox.streets',
+                        accessToken: 'pk.eyJ1IjoiY2hpcmljaGlnbm9hIiwiYSI6ImNqaXVteTNtejB4dmQza2xnNWJ5NXNsYjgifQ.5tA7QptUogzoAmQ8S3m10g'
+                    });
+                    var heatmapLayer = new HeatmapOverlay(cfg);
+                    var map = new L.Map('map', {
+                        center: new L.LatLng(-37.328836, -59.136921),
+                        zoom: 16,
+                        layers: [baseLayer, heatmapLayer]
+                    });
+                    console.log(data);
+                    heatmapLayer.setData(data);
+
+                    layer = heatmapLayer;
+                }

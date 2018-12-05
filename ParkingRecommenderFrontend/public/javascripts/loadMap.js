@@ -102,7 +102,8 @@ function fetchPrediction(lat, lon, currentDate) {
     let query = Object.keys(params)
         .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
         .join('&');
-    const url = 'http://172.21.0.10:4000/prediction?' + query;
+    // const url = 'http://172.21.0.10:4000/prediction?' + query;
+    const url = 'http://parking-recommender-app/prediction?' + query;
     fetch(url, {method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -110,29 +111,10 @@ function fetchPrediction(lat, lon, currentDate) {
         },
         mode: 'cors'
     })
-        .then(validateResponse)
-        .then(readResponseAsJSON)
-        .then(processResult)
-        .catch(logError);
-//     let url = "http://172.21.0.5:5000/predict";
-//     fetch(url, {
-//             method: 'POST',
-//             headers: {
-//                 'Accept': 'application/json',
-//                 'Content-Type': 'application/json'
-//             },
-//             mode: 'cors',
-//             body: JSON.stringify({
-//                 lat: lat,
-//                 lon: lon,
-//                 time: roundTime(currentDate.toTimeString(), 15),
-//                 dow: currentDate.getDay()
-//             })
-//         })
-//         .then(validateResponse)
-//         .then(readResponseAsJSON)
-//         .then(processResult)
-//         .catch(logError);
+    .then(validateResponse)
+    .then(readResponseAsJSON)
+    .then(processResult)
+    .catch(logError);
 }
 
 let doubleClickMarker;

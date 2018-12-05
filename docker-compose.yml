@@ -158,6 +158,22 @@ services:
     networks: 
       - frontend
 
+  heatmap:
+    build:
+      context: ./heatmap
+      dockerfile: Dockerfile
+    working_dir: /app
+    #image: chirichignoa/parkingrecommender_heatmap:latest
+    ports:
+      - "3001:3001"
+    depends_on:
+      - avr-service
+    links: 
+      - avr-service
+    networks: 
+      - backend
+      - frontend
+
 networks:
   frontend:
   #  driver: bridge
