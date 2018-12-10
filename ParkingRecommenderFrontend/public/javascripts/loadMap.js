@@ -1,7 +1,7 @@
 // const rp = require('request-promise');
 let startPos;
 let lat, lon;
-const url = "http://172.21.0.5:5000/predict";
+const url = "http://172.18.0.11:5000/predict";
 const LOW_AVAILABILITY = 0.33,
     MEDIUM_AVAILABILITY = 0.66,
     HIGH_AVAILABILITY = 1;
@@ -102,8 +102,8 @@ function fetchPrediction(lat, lon, currentDate) {
     let query = Object.keys(params)
         .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
         .join('&');
-    // const url = 'http://172.21.0.10:4000/prediction?' + query;
-    const url = 'http://parking-recommender-app/prediction?' + query;
+    const url = 'http://172.18.0.11:4000/prediction?' + query;
+    // const url = 'http://parking-recommender-app/prediction?' + query;
     fetch(url, {method: 'GET',
         headers: {
             'Accept': 'application/json',
