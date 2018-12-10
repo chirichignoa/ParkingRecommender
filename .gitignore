@@ -112,3 +112,34 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+AVRService/bin
+MovementsService/bin
+HeatmapApp/bin
+ParkingMetersService/bin
+MovementsService/\.classpath
+
+MovementsService/\.factorypath
+
+MovementsService/\.project
+
+MovementsService/\.settings/org\.eclipse\.jdt\.apt\.core\.prefs
+
+MovementsService/\.settings/org\.eclipse\.jdt\.core\.prefs
+
+MovementsService/\.settings/org\.eclipse\.m2e\.core\.prefs
+
+ParkingMetersService/\.classpath
+
+ParkingMetersService/\.factorypath
+
+ParkingMetersService/\.project
+
+ParkingMetersService/\.settings/org\.eclipse\.jdt\.apt\.core\.prefs
+
+ParkingMetersService/\.settings/org\.eclipse\.jdt\.core\.prefs
+
+ParkingMetersService/\.settings/org\.eclipse\.m2e\.core\.prefs
+
+AVRService/\.project
+
+HeatmapApp/\.project
