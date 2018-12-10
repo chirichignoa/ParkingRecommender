@@ -28,4 +28,7 @@ docker push chirichignoa/parkingrecommender_coordinate-distance-service:latest
 docker tag parkingrecommender_parkingmeters-service chirichignoa/parkingrecommender_parkingmeters-service:latest
 docker push chirichignoa/parkingrecommender_parkingmeters-service:latest
 
+# Obtener la ip del container id 
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' 9b97b900d7d2
+
 
