@@ -3,9 +3,9 @@ var router = express.Router();
 var fecha = require('fecha');
 var generator = require('../public/javascripts/parking-data-generator');
 
-router.get('/:date/:time?', function(req, res, next) {
+router.get('/:date/:hour?', function(req, res, next) {
     let date = req.params.date;
-    let time = req.params.time;
+    let time = req.params.hour;
     console.log(date);
     console.log(time);
     generator.generateData(date, time).then((fulfilled) => {

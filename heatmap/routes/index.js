@@ -3,6 +3,6 @@ var router = express.Router();
 var indexController = require("../controllers/indexController");
 
 /* GET home page. */
-router.get('/:date/:time?',indexController.renderView);
+router.get('/:date/:hour?',indexController.renderView);
 
 module.exports = router;
