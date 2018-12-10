@@ -142,7 +142,7 @@ services:
     networks: 
       - backend
       - frontend
-      
+
   parking-recommender-frontend:
     build:
       context: ./ParkingRecommenderFrontend
@@ -158,6 +158,22 @@ services:
     networks: 
       - frontend
 
+  heatmap-app:
+    build:
+      context: ./HeatmapApp
+      dockerfile: Dockerfile
+    working_dir: /app
+    #image: chirichignoa/parkingrecommender_parking-recommender-app:latest
+    ports:
+      - "4570:4570"
+    depends_on:
+      - avr-service
+    links: 
+      - avr-service
+    networks: 
+      - backend
+      - frontend
+
   heatmap:
     build:
       context: ./heatmap
@@ -165,13 +181,12 @@ services:
     working_dir: /app
     #image: chirichignoa/parkingrecommender_heatmap:latest
     ports:
-      - "3001:3001"
+      - "3001:81"
     depends_on:
-      - avr-service
+      - heatmap-app
     links: 
-      - avr-service
+      - heatmap-app
     networks: 
-      - backend
       - frontend
 
 networks:
