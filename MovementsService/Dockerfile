@@ -1,7 +1,7 @@
 FROM java:8
 
 WORKDIR /app
-ADD /target/MovementsService.jar /app/MovementsService.jar
+COPY /target/MovementsService.jar /app
 ENTRYPOINT ["java", "-jar", "MovementsService.jar"]
 
 EXPOSE 4567

@@ -1,7 +1,7 @@
 FROM java:8
 
 WORKDIR /app
-ADD /target/AVRService.jar /app/AVRService.jar
+COPY /target/AVRService.jar /app
 ENTRYPOINT ["java", "-jar", "AVRService.jar"]
 
 EXPOSE 4569
