@@ -1,21 +1,27 @@
+global.fetch = require('isomorphic-fetch');
 var express = require('express');
 var router = express.Router();
 var generator = require('../public/javascripts/parking-data-generator');
 
 let config = {
-    host: "http://avr-service",
-    port: 4569,
-    path: "/avr"
+    host: "http://172.19.0.2",
+    port: 4570,
+    path: "/get_avr"
 };
 
-let data = {
+var ret = {
     min: 0,
     max: 100,
     data: []
 };
 
 function processResult(result) {
-    data.data = result;
+    // console.log('-------------------------------------------------------------------');
+    // console.log('data: ' + ret);
+    // console.log('-------------------------------------------------------------------');
+    // console.log('Setting data');
+    // console.log(result);
+    ret.data.push(result);
 }
 
 function logError(error) {
@@ -38,7 +44,8 @@ function fetchData(params) {
         .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
         .join('&');
     const url = config.host + ':' + config.port + config.path + '?' + query;
-    fetch(url, {
+    console.log(url);
+    return fetch(url, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -48,17 +55,18 @@ function fetchData(params) {
         })
         .then(validateResponse)
         .then(readResponseAsJSON)
-        .then(processResult())
         .catch(logError);
 }
 
 function renderView(req, res, next) {
     let date = req.params.date;
-    let time = req.params.time;
-    const params = { date: req.params.date, time: req.params.time };
+    let hour = req.params.hour;
+    const params = { date: req.params.date, hour: req.params.hour };
     console.log(params);
-    fetchData(params, data);
-    res.render('map', { title: 'HeatMap', jsonData: data });
+    fetchData(params)
+    .then((result) => {
+        res.render('map', { title: 'HeatMap', jsonData: { min: 0, max: 100, data: result }});
+    });
     //console.log(generator.generateData());
 }
 
